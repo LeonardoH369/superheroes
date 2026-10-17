@@ -1,0 +1,2 @@
+const {DataTypes}=require('sequelize');const db=require('../config/database');
+module.exports=db.define('Superhero',{id:{type:DataTypes.INTEGER.UNSIGNED,autoIncrement:true,primaryKey:true},real_name:{type:DataTypes.STRING(120),allowNull:false},alias:{type:DataTypes.STRING(120),allowNull:false,unique:true},photo_url:{type:DataTypes.STRING(2048),allowNull:false},information:{type:DataTypes.TEXT,allowNull:false}},{tableName:'superheroes',underscored:true,paranoid:true});

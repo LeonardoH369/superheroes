@@ -1,0 +1,1 @@
+const app=require('./app');const db=require('./config/database');db.authenticate().then(()=>app.listen(Number(process.env.PORT||3002),'127.0.0.1',()=>console.log('http://localhost:'+ (process.env.PORT||3002)))).catch(e=>{console.error(e.message);process.exitCode=1;});

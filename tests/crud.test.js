@@ -1,0 +1,17 @@
+
+const {test,before,after}=require('node:test');const assert=require('node:assert/strict');const {once}=require('node:events');
+assert.match(process.env.DB_NAME||'',/^(superheroes|grades)_test$/,'Usar exclusivamente la base de pruebas');
+const app=require('../src/app');const db=require('../src/config/database');let server,base,cookie,csrf;
+before(async()=>{await db.authenticate();server=app.listen(0,'127.0.0.1');await once(server,'listening');base=`http://127.0.0.1:${server.address().port}`;const r=await fetch(base+'/');cookie=r.headers.get('set-cookie').split(';')[0];const html=await (await fetch(base+FORM,{headers:{cookie}})).text();csrf=html.match(/name="_csrf" value="([^"]+)"/)[1];});
+after(async()=>{if(server)await new Promise(resolve=>server.close(resolve));await db.close();});
+async function post(url,values,token=csrf){return fetch(base+url,{method:'POST',redirect:'manual',headers:{cookie,'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({...values,_csrf:token})});}
+async function page(url){const r=await fetch(base+url,{headers:{cookie}});return {status:r.status,text:await r.text()};}
+
+const FORM='/superheroes/create';
+const Hero=require('../src/models/Superhero');let created;
+const values={real_name:'Nombre de prueba',alias:'Test Hero',photo_url:'https://example.com/hero.png',information:'Información del héroe de prueba.'};
+test('listas, formulario y detalle muestran registros de la base',async()=>{assert.match((await page('/superheroes')).text,/Aurora/);for(const path of ['/superheroes/create','/superheroes/1','/superheroes/1/edit','/superheroes/1/delete'])assert.equal((await page(path)).status,200);});
+test('registro valida datos y crea una ficha persistente',async()=>{assert.equal((await post('/superheroes',{...values,photo_url:'javascript:alert(1)'})).status,422);assert.equal((await post('/superheroes',{...values,real_name:' '})).status,422);const r=await post('/superheroes',values);assert.equal(r.status,303);created=Number(r.headers.get('location').match(/superheroes\/(\d+)/)[1]);assert.equal((await Hero.findByPk(created)).alias,'Test Hero');assert.equal((await post('/superheroes',values)).status,422);});
+test('edición actualiza los cuatro campos y escapa HTML',async()=>{const r=await post(`/superheroes/${created}/update`,{...values,alias:'Test Hero Updated',real_name:'Nombre editado',information:'<script>alert(1)</script>',photo_url:'https://example.com/new.png'});assert.equal(r.status,303);const h=await Hero.findByPk(created);assert.equal(h.real_name,'Nombre editado');assert.equal(h.photo_url,'https://example.com/new.png');const p=await page(`/superheroes/${created}`);assert.match(p.text,/&lt;script&gt;/);assert.doesNotMatch(p.text,/<script>alert/);});
+test('baja retira la ficha del listado y conserva deleted_at',async()=>{assert.equal((await post(`/superheroes/${created}/delete`,{})).status,303);assert.equal(await Hero.findByPk(created),null);assert.ok((await Hero.findByPk(created,{paranoid:false})).deletedAt);assert.equal((await page(`/superheroes/${created}`)).status,404);await Hero.destroy({where:{id:created},force:true});});
+test('CSRF, identificadores inválidos y registros ausentes son rechazados',async()=>{assert.equal((await post('/superheroes',values,'bad')).status,403);assert.equal((await page('/superheroes/no')).status,400);assert.equal((await page('/superheroes/999999')).status,404);});
