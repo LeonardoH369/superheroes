@@ -10,14 +10,17 @@
     "db:migrate": "sequelize-cli db:migrate",
     "db:seed": "sequelize-cli db:seed:all",
     "db:status": "sequelize-cli db:migrate:status",
-    "test": "node --test tests/crud.test.js"
+    "test": "node --test tests/storage.test.js",
+    "db:inspect": "node scripts/inspect-database.js"
   },
   "dependencies": {
     "dotenv": "18.0.5",
+    "ejs": "3.1.10",
     "express": "5.2.1",
-    "sequelize": "6.37.8",
+    "multer": "2.5.0",
     "mysql2": "3.24.5",
-    "ejs": "3.1.10"
+    "sequelize": "6.37.8",
+    "sharp": "0.35.5"
   },
   "devDependencies": {
     "sequelize-cli": "6.6.5"

@@ -1,0 +1,6 @@
+<%- include('../partials/header') %><a class="back" href="/superheroes">← Volver a fichas activas</a>
+<div class="eyebrow">Archivo recuperable</div><h1>Papelera de superhéroes</h1>
+<p class="lead"><%= heroes.length %> fichas dadas de baja. Las fotografías permanecen en el almacenamiento local.</p>
+<% if(!heroes.length){ %><section class="panel empty"><h2>La papelera está vacía</h2><p>No hay fichas pendientes de restaurar.</p></section><% } %>
+<div class="grid"><% heroes.forEach(hero=>{ %><article class="card"><img src="<%= hero.photo_path %>" alt="Foto conservada de <%= hero.alias %>"><div class="card-body"><span class="badge">Baja lógica · #<%= hero.id %></span><h2><%= hero.alias %></h2><p><%= hero.real_name %></p><p class="muted">Retirado: <%= hero.deletedAt.toISOString().replace('T',' ').slice(0,19) %> UTC</p><a class="button" href="/superheroes/<%= hero.id %>/restore">Restaurar ficha</a></div></article><% }) %></div>
+<%- include('../partials/footer') %>

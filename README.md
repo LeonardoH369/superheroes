@@ -1,74 +1,104 @@
-# superheroes — Activity 8
+# superheroes — Activity 10
 
-CRUD de superhéroes: nombre real, alias, URL de fotografía e información adicional. Incluye listado, alta, ficha completa, edición y confirmación de baja.
+Actualización del CRUD de Activity 8 con **fotografías locales, borrado lógico y papelera con restauración**. Utiliza JavaScript, Node.js, Express, Sequelize, EJS y MySQL, siguiendo el stack de PrintBox.
 
-Proyecto independiente con **Express + Sequelize + EJS + MySQL/MariaDB**, como adaptación tecnológica solicitada para esta entrega. Express sustituye el controlador y las rutas de Laravel, EJS proporciona las vistas y Sequelize los modelos y migraciones. No utiliza Laravel 7 ni Artisan.
+- [Proyecto actualizado en GitHub](https://github.com/LeonardoH369/superheroes/tree/codex/activity-10-entrega)
+- [Reporte editable con portada y capturas](docs/Activity_10_Leonardo_Hinojosa_Castro.docx)
+- [Capturas de vistas y consultas reales de MySQL](docs/capturas-activity10)
+- [Verificación de la entrega](docs/ACTIVITY10_VERIFICACION.md)
 
-Repositorio: https://github.com/LeonardoH369/superheroes
+## Funcionalidades nuevas
 
-[Reporte editable en Google Docs](https://docs.google.com/document/d/1icmADCPNSG8SJPOL-5mWxd5D0H4VR0Q7lrXD0Y9wqEQ/edit)
+1. El alta recibe una fotografía desde la computadora mediante un formulario multipart. Ya no admite URLs externas ni rutas proporcionadas por el usuario.
+2. El archivo se valida como JPEG, PNG o WebP real, de hasta 5 MB y 16 megapíxeles. Se normaliza a JPEG, con orientación corregida y un máximo de 1600 px por lado. Se genera un nombre UUID y se guarda en `storage/photos`. El nombre original no determina su ruta.
+3. La columna `photo_path` almacena una ruta como `/storage/photos/UUID.jpg`, sin dominio ni ruta absoluta de la computadora.
+4. En edición, no elegir archivo conserva la imagen actual; elegir otro guarda una imagen nueva y conserva la anterior en el disco.
+5. El listado muestra solo registros activos. La baja asigna `deleted_at`, sin eliminar la fila ni su imagen.
+6. La papelera muestra las fichas retiradas y permite restaurarlas mediante confirmación y POST protegido con CSRF. La restauración conserva el identificador y la fotografía, y establece `deleted_at = NULL`.
 
-## Instalación
+No hay eliminación definitiva ni limpieza automática de imágenes. Conservar todos los archivos también aplica a los reemplazos. Las fotos de fichas retiradas siguen disponibles localmente; esta aplicación académica no implementa privacidad por usuario.
 
-Requisitos: Node.js 22.13 o superior y MySQL 8.0.16+ o MariaDB 10.4+. Probado con Node.js 24.19 y MariaDB 10.4.32.
+## Instalación nueva
+
+Requisitos: Node.js 22.13 o superior y MySQL 8.0.16 o superior. Verificado con Node.js 24.19.0 y MySQL Community Server 8.4.9.
 
 ```powershell
 npm ci
 Copy-Item .env.example .env
-# Configurar DB_HOST, DB_PORT, DB_NAME, DB_USER y DB_PASSWORD en .env.
-# Iniciar el servicio MySQL/MariaDB.
+# Configurar la conexión a una base de desarrollo en .env.
 npm run db:create
 npm run db:migrate
 npm run db:seed
 npm start
 ```
 
-Abrir http://localhost:3002. No ejecutar `db:create` si la base ya existe. Las migraciones y semillas se registran en SequelizeMeta y SequelizeData; `db:seed` no vuelve a ejecutar las semillas ya registradas. No se usa sync con force. `.env` y `node_modules` se excluyen de Git. El ejemplo de conexión usa puerto de BD 3306; la validación local se realizó en una instancia aislada con puerto 3307.
+Abrir http://localhost:3002. No ejecutar db:create si la base ya existe. El servidor escucha en 127.0.0.1 y está destinado al uso académico local, sin autenticación.
 
-## Estructura MVC
+Las semillas iniciales crean **12 registros: 10 activos y 2 con baja lógica**. Son personajes ficticios con ilustraciones locales. El recorrido de la entrega agrega una ficha desde el formulario y termina con 13 registros: 11 activos y 2 eliminados lógicamente. La captura intermedia muestra 10 activos y 3 eliminados antes de restaurarla.
 
-`src/models/Superhero.js`: modelo. `src/controllers/SuperheroController.js`: acciones index, create, store, show, edit, update, confirmDelete y destroy.
+## Actualización desde Activity 8
 
-`src/views/` contiene las vistas EJS; `src/routes/web.js`, las rutas; `src/migrations/`, el esquema; `src/seeders/`, los ejemplos; `public/`, los estilos y recursos. El servidor escucha exclusivamente en 127.0.0.1: aplicación local de uso académico sin autenticación.
+Usar la rama codex/activity-10-entrega y conservar una copia de la base y de las imágenes antes de migrar datos propios. Luego ejecutar npm ci, npm run db:migrate y npm run db:seed con la conexión configurada.
 
-## Rutas
+La migración incremental `20261024000100-local-photos.js` renombra photo_url a photo_path. Mantiene deleted_at, que ya existía en Activity 8, y lo agrega solo si falta. Convierte las imágenes de demostración de public/images a JPEG dentro de storage/photos y actualiza las rutas de **todas** las filas, incluidas las retiradas.
 
-GET `/superheroes`, `/superheroes/create`, `/superheroes/:id`, `/superheroes/:id/edit` y `/superheroes/:id/delete`. POST `/superheroes`, `/superheroes/:id/update` y `/superheroes/:id/delete`.
+Las URLs desconocidas de registros anteriores se sustituyen por la ilustración local Aurora; no se descargan archivos externos. Para conservar una foto personalizada debe cargarse su archivo desde la edición. La migración inversa conserva los archivos y renombra la columna; no reconstruye las URLs antiguas. No deshace las bajas previas.
 
-Se usan formularios HTML con POST para escrituras y redirección 303 tras guardar. Abrir la confirmación de eliminación con GET no cambia la base. Los formularios incluyen token CSRF firmado y cookie HttpOnly/SameSite. EJS escapa el contenido mostrado, se validan los datos en el servidor y se usan operaciones del ORM sin concatenar SQL con entradas del usuario.
+El seeder adicional respeta los alias existentes y agrega los ejemplos que faltan. SequelizeMeta y SequelizeData registran las migraciones y semillas. No se usa sync con force. La nueva semilla no ofrece un borrado físico inverso automático.
 
-## Reglas de datos
+## Almacenamiento
 
-Los alias son únicos, incluso después de una baja lógica. La foto se guarda como URL HTTP/HTTPS; los ejemplos usan ilustraciones ficticias incluidas en `public/images`, servidas por el puerto 3002. Si se cambia el puerto, deben actualizarse esas URLs. Una URL externa debe permitir su visualización desde el navegador.
+`storage/photos` se crea automáticamente; Express lo sirve en /storage/photos. Solo contiene JPEG generados por la aplicación o las semillas. Las imágenes se decodifican antes de guardarse. No se guardan archivos si falla CSRF o la validación de los campos. Un fallo posterior de la base podría dejar un archivo sin referencia, que se conserva conforme a esta actividad.
 
-Las eliminaciones son bajas lógicas mediante `deleted_at`. Los registros retirados dejan de aparecer en las consultas normales; el modelo permite recuperarlos mediante `restore()` en una operación administrativa de desarrollo. No se incluye interfaz de papelera.
+Los archivos cargados, .env, node_modules y las bases locales se excluyen de Git. Las ilustraciones fuente sí se incluyen en public/images para que las semillas puedan regenerar las fotos de ejemplo. Si se mueve una instalación con fotos propias, debe copiarse también storage/photos; clonar Git no recupera los archivos privados de esa instalación.
 
-## Pruebas
+## Rutas y organización
+
+| Método | Ruta | Función |
+| --- | --- | --- |
+| GET | /superheroes | Listado activo |
+| GET | /superheroes/create | Formulario de alta |
+| POST | /superheroes | Registrar con foto local |
+| GET | /superheroes/trash | Papelera |
+| GET | /superheroes/:id | Ficha activa |
+| GET | /superheroes/:id/edit | Formulario de edición |
+| POST | /superheroes/:id/update | Guardar datos y foto opcional |
+| GET | /superheroes/:id/delete | Confirmar baja |
+| POST | /superheroes/:id/delete | Baja lógica |
+| GET | /superheroes/:id/restore | Confirmar restauración |
+| POST | /superheroes/:id/restore | Recuperar ficha |
+
+src/models/Superhero.js define paranoid: true. SuperheroController separa las consultas activas de la papelera con paranoid: false y deletedAt no nulo. src/storage.js procesa imágenes; src/middleware/upload.js recibe un solo archivo con límites; src/views/superheroes contiene las siete vistas principales. src/middleware/forms.js valida CSRF en todas las escrituras, después de analizar el cuerpo del formulario.
+
+## Pruebas y consulta de la base
 
 ```powershell
+# Configurar también host, puerto y credenciales para la instancia de pruebas.
 $env:DB_NAME = 'superheroes_test'
-npm run db:create
+npm run db:create # Solo si la base de pruebas aún no existe.
 npm run db:migrate
 npm run db:seed
 npm test
 Remove-Item Env:DB_NAME
+
+# Con la base de desarrollo configurada:
+npm run db:inspect
 ```
 
-`npm test` solo permite las bases `superheroes_test` o `grades_test`; configurar la conexión con un nombre propio de este proyecto. 5 pruebas aprobadas. Se verifican lecturas y escrituras reales, errores de validación, referencias, bajas, escape HTML y protección CSRF. Las pruebas crean y limpian sus propios registros de ejemplo; ejecutarlas sobre una base de pruebas migrada y sembrada.
+Las 10 pruebas de tests/storage.test.js usan exclusivamente superheroes_test, crean fotos en un directorio temporal propio y limpian solo sus datos al finalizar. Comprueban alta, edición, foto opcional, reemplazo sin borrado, contenido inválido, límite de tamaño, alias únicos, CSRF, baja y restauración. La salida ejecutada se conserva en docs/capturas-activity10/pruebas.txt.
 
-## Evidencias
+db:inspect es de solo lectura y muestra registros activos y retirados, sus rutas y el esquema. Las capturas de la base presentan resultados reales consultados directamente a MySQL mediante un visor temporal de evidencia; ese visor no forma parte de la aplicación ni equivale a una captura de phpMyAdmin.
 
-Capturas originales en [docs/screenshots](docs/screenshots). En `docs/screenshots/report` hay recortes de las mismas capturas para mejorar la lectura en el reporte, sin modificar datos ni controles. Los registros utilizados para demostrar las operaciones son ficticios.
+Los documentos y capturas de Activity 8 se conservan como antecedentes. El reporte vigente de esta actividad es Activity_10_Leonardo_Hinojosa_Castro.docx.
 
 ## Referencias
 
-- https://expressjs.com/en/guide/routing/
-- https://sequelize.org/docs/v6/core-concepts/model-querying-basics/
-- https://sequelize.org/docs/v6/core-concepts/paranoid/
-- https://ejs.co/
+- [Multer y formularios multipart](https://expressjs.com/en/resources/middleware/multer/)
+- [Sharp y validación de imágenes](https://sharp.pixelplumbing.com/api-constructor/)
+- [Sequelize y borrado lógico](https://sequelize.org/docs/v6/core-concepts/paranoid/)
 
-## Entrega actual verificada
+La implementación adapta la actividad al stack de PrintBox solicitado para esta entrega; no utiliza Laravel 7.
 
-[Reporte editable con portada y capturas](docs/Activity_8_Leonardo_Hinojosa_Castro.docx) · [Capturas actuales](docs/capturas-entrega) · [Verificación adicional con MySQL](docs/ENTREGA_ACTUAL.md).
+## Estado de dependencias
 
-La aceptación académica del cambio de framework debe confirmarse con el docente.
+Se aplicó la actualización compatible de body-parser detectada por npm audit. Permanecen dos avisos moderados asociados a uuid y Sequelize 6; la corrección automática propuesta requiere cambiar de versión mayor del ORM y no se aplicó. El proyecto conserva su alcance académico local.

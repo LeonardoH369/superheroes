@@ -1,0 +1,132 @@
+{
+  "figures": [
+    {
+      "file": "01-activos.png",
+      "title": "Listado de fichas activas",
+      "description": "Parte superior del listado inicial con 10 fichas activas. Los dos registros dados de baja se consultan desde la papelera."
+    },
+    {
+      "file": "02-registro.png",
+      "title": "Registro con archivo local",
+      "description": "El formulario selecciona un archivo JPEG de la computadora. No existe un campo para URL externa."
+    },
+    {
+      "file": "03-ficha.png",
+      "title": "Ficha con fotografía guardada localmente",
+      "description": "La ficha recién creada muestra la imagen servida desde storage/photos y los datos persistidos en MySQL."
+    },
+    {
+      "file": "04-edicion.png",
+      "title": "Edición con reemplazo de fotografía",
+      "description": "Se selecciona una nueva fotografía local. El campo también puede dejarse vacío para conservar la imagen actual."
+    },
+    {
+      "file": "05-edicion-guardada.png",
+      "title": "Cambios y nueva fotografía guardados",
+      "description": "La ficha conserva su identificador y muestra el nombre actualizado y la fotografía de reemplazo. La foto anterior sigue en el disco."
+    },
+    {
+      "file": "06-confirmar-baja.png",
+      "title": "Confirmación de baja lógica",
+      "description": "La vista informa que la ficha pasará a la papelera y que su archivo local se conservará."
+    },
+    {
+      "file": "07-baja.png",
+      "title": "Listado después de la baja",
+      "description": "La ficha Fénix local DEMO deja de aparecer en la colección activa; la fotografía sigue almacenada."
+    },
+    {
+      "file": "08-papelera.png",
+      "title": "Papelera con registros recuperables",
+      "description": "La papelera muestra las tres fichas dadas de baja durante esta demostración, sus imágenes conservadas y el enlace para restaurarlas."
+    },
+    {
+      "file": "09-base-con-bajas.png",
+      "title": "Base de datos con registros activos y eliminados",
+      "description": "Resultado real de una consulta MySQL: 13 registros, 10 activos y 3 con baja lógica. Todas las fotografías utilizan rutas locales."
+    },
+    {
+      "file": "10-restaurar.png",
+      "title": "Confirmación de restauración",
+      "description": "La vista recupera la ficha retirada y muestra su fotografía conservada antes de confirmar."
+    },
+    {
+      "file": "11-restaurado.png",
+      "title": "Ficha restaurada con la misma fotografía",
+      "description": "La ficha vuelve a estar activa sin volver a cargar su archivo. Se conserva el identificador y la ruta de la fotografía."
+    },
+    {
+      "file": "12-papelera-final.png",
+      "title": "Papelera después de restaurar",
+      "description": "Solo quedan las dos bajas originales de demostración; Fénix local DEMO ya no está en esta vista."
+    },
+    {
+      "file": "13-base-final.png",
+      "title": "Base de datos después de la restauración",
+      "description": "Después de restaurar se conservan 13 filas: 11 activas y 2 eliminadas lógicamente. deleted_at de la ficha restaurada vuelve a NULL."
+    },
+    {
+      "file": "14-esquema.png",
+      "title": "Estructura de la tabla superheroes",
+      "description": "La estructura contiene photo_path para la ruta local y deleted_at nullable para identificar la baja lógica."
+    },
+    {
+      "file": "15-almacenamiento.png",
+      "title": "Archivos conservados en storage photos",
+      "description": "El directorio contiene cinco JPEG: tres imágenes de semilla y las dos cargadas en el recorrido. La huella del archivo restaurado coincide con la obtenida antes de su baja."
+    },
+    {
+      "file": "16-validacion.png",
+      "title": "Validación del contenido de la fotografía",
+      "description": "El servidor rechaza un archivo de texto renombrado como PNG y conserva los demás campos del formulario."
+    },
+    {
+      "file": "17-no-encontrado.png",
+      "title": "Vista de registro no encontrado",
+      "description": "La vista de error responde a identificadores que no existen y a fichas retiradas cuando se intenta usar su ruta activa."
+    },
+    {
+      "file": "18-pruebas.png",
+      "title": "Diez pruebas aprobadas",
+      "description": "Las 10 pruebas verifican cargas y reemplazos, límites y contenido del archivo, validación, CSRF, bajas, restauración y conservación de imágenes."
+    }
+  ],
+  "pageErrors": [],
+  "recordId": 13,
+  "countsBefore": {
+    "total": 13,
+    "activos": "10",
+    "eliminados": "3"
+  },
+  "countsFinal": {
+    "total": 13,
+    "activos": "11",
+    "eliminados": "2"
+  },
+  "oldPhoto": "/storage/photos/133f2faf-2c06-4816-adbf-edaf1342cfbf.jpg",
+  "restoredPhoto": "/storage/photos/3c07f7a2-0797-474f-9090-55a4ddb81fb2.jpg",
+  "sha256Before": "d8ec302ce8cb3856d7aa3f74da802016e56a920e542de21875ae39ab71324a60",
+  "sha256After": "d8ec302ce8cb3856d7aa3f74da802016e56a920e542de21875ae39ab71324a60",
+  "files": [
+    {
+      "archivo": "133f2faf-2c06-4816-adbf-edaf1342cfbf.jpg",
+      "bytes": 12183
+    },
+    {
+      "archivo": "3c07f7a2-0797-474f-9090-55a4ddb81fb2.jpg",
+      "bytes": 11557
+    },
+    {
+      "archivo": "demo-aurora.jpg",
+      "bytes": 12758
+    },
+    {
+      "archivo": "demo-centinela.jpg",
+      "bytes": 11981
+    },
+    {
+      "archivo": "demo-marea.jpg",
+      "bytes": 12300
+    }
+  ]
+}

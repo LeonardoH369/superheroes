@@ -1,0 +1,18 @@
+✔ listado activo y papelera separan registros por deleted_at (339.8608ms)
+✔ alta exige archivo y rechaza URLs o rutas manuales (33.2249ms)
+✔ alta guarda JPEG local con ruta relativa y sirve la imagen (202.7766ms)
+✔ edición sin archivo conserva foto y escapa HTML (242.6983ms)
+✔ reemplazar foto conserva archivo anterior y crea uno distinto (235.1878ms)
+✔ CSRF impide altas y escrituras de archivos (18.7344ms)
+✔ rechaza archivos falsos y mayores de 5 MB sin persistirlos (31.4487ms)
+✔ baja conserva fila y fotos y oculta ficha y edición (677.6645ms)
+✔ restauración exige CSRF y recupera misma fila y fotografía (254.345ms)
+✔ alias únicos e identificadores inválidos son rechazados (18.0408ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4388.0148
