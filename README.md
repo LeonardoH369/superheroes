@@ -2,7 +2,7 @@
 
 CRUD de superhéroes: nombre real, alias, URL de fotografía e información adicional. Incluye listado, alta, ficha completa, edición y confirmación de baja.
 
-Proyecto independiente con **Express + Sequelize + EJS + MySQL/MariaDB**, conforme a la adaptación de framework autorizada por el docente. Express sustituye el controlador y las rutas de Laravel, EJS proporciona las vistas y Sequelize los modelos y migraciones. No utiliza Laravel 7 ni Artisan.
+Proyecto independiente con **Express + Sequelize + EJS + MySQL/MariaDB**, como adaptación tecnológica solicitada para esta entrega. Express sustituye el controlador y las rutas de Laravel, EJS proporciona las vistas y Sequelize los modelos y migraciones. No utiliza Laravel 7 ni Artisan.
 
 Repositorio: https://github.com/LeonardoH369/superheroes
 
@@ -66,3 +66,9 @@ Capturas originales en [docs/screenshots](docs/screenshots). En `docs/screenshot
 - https://sequelize.org/docs/v6/core-concepts/model-querying-basics/
 - https://sequelize.org/docs/v6/core-concepts/paranoid/
 - https://ejs.co/
+
+## Entrega actual verificada
+
+[Reporte editable con portada y capturas](docs/Activity_8_Leonardo_Hinojosa_Castro.docx) · [Capturas actuales](docs/capturas-entrega) · [Verificación adicional con MySQL](docs/ENTREGA_ACTUAL.md).
+
+La aceptación académica del cambio de framework debe confirmarse con el docente.

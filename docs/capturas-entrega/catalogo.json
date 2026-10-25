@@ -1,0 +1,62 @@
+{
+  "port": 3002,
+  "figures": [
+    {
+      "file": "01-listado.png",
+      "title": "Listado de superhéroes",
+      "description": "Vista inicial con fichas de demostración, nombre real y opciones de consulta, edición y baja."
+    },
+    {
+      "file": "02-registro.png",
+      "title": "Registro de un nuevo superhéroe",
+      "description": "Formulario real con los cuatro campos solicitados. La imagen se almacena como URL."
+    },
+    {
+      "file": "03-ficha.png",
+      "title": "Visualización de la ficha completa",
+      "description": "El registro recién creado se consulta con su imagen, identidad real e información adicional."
+    },
+    {
+      "file": "04-edicion.png",
+      "title": "Edición de los datos del superhéroe",
+      "description": "Formulario de edición con cambios de nombre real e información adicional preparados para guardar."
+    },
+    {
+      "file": "05-actualizado.png",
+      "title": "Cambios guardados y consultados",
+      "description": "La ficha muestra los valores actualizados desde la base de datos."
+    },
+    {
+      "file": "06-confirmacion-baja.png",
+      "title": "Confirmación de la baja",
+      "description": "La confirmación informa que el registro dejará de aparecer y que se conserva una baja lógica."
+    },
+    {
+      "file": "07-baja-completada.png",
+      "title": "Registro retirado del listado",
+      "description": "El superhéroe de prueba ya no aparece entre las fichas activas después de confirmar la baja."
+    },
+    {
+      "file": "08-validacion.png",
+      "title": "Validación de la URL de imagen",
+      "description": "El servidor rechaza una URL que no utiliza HTTP o HTTPS y conserva los valores del formulario."
+    },
+    {
+      "file": "09-registro-no-encontrado.png",
+      "title": "Consulta de un registro dado de baja",
+      "description": "La ficha retirada responde como no encontrada y no se expone como registro activo."
+    },
+    {
+      "file": "10-modelo-controlador-migracion.png",
+      "title": "Modelo controlador y migración de superheroes",
+      "description": "Captura del visor técnico con archivos o salidas reales del proyecto."
+    },
+    {
+      "file": "11-pruebas.png",
+      "title": "Cinco pruebas aprobadas de superheroes",
+      "description": "Captura del visor técnico con archivos o salidas reales del proyecto."
+    }
+  ],
+  "repository": "https://github.com/LeonardoH369/superheroes",
+  "pageErrors": []
+}

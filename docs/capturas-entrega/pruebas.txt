@@ -1,0 +1,13 @@
+✔ listas, formulario y detalle muestran registros de la base (165.0536ms)
+✔ registro valida datos y crea una ficha persistente (146.0526ms)
+✔ edición actualiza los cuatro campos y escapa HTML (75.265ms)
+✔ baja retira la ficha del listado y conserva deleted_at (154.4848ms)
+✔ CSRF, identificadores inválidos y registros ausentes son rechazados (18.0194ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1544.3847
